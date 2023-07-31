@@ -7,6 +7,7 @@ import (
 	"github.com/rafiulgits/identity-access-control/infra/db"
 	"github.com/rafiulgits/identity-access-control/logger"
 	"github.com/rafiulgits/identity-access-control/models/configs"
+	"github.com/rafiulgits/identity-access-control/models/domains"
 	"github.com/rafiulgits/identity-access-control/models/validator"
 	"github.com/rs/zerolog"
 	"gorm.io/driver/postgres"
@@ -86,5 +87,14 @@ func (i *Infra) connectDatabase() {
 }
 
 func (i *Infra) dbMigration() {
-	i.database.AutoMigrate()
+	i.database.AutoMigrate(
+		&domains.Customer{},
+		&domains.Vendor{},
+		&domains.Product{},
+		&domains.Policy{},
+		&domains.Permission{},
+		&domains.User{},
+		&domains.UserPolicy{},
+		&domains.Account{},
+	)
 }

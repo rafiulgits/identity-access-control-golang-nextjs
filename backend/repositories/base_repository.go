@@ -1,4 +1,4 @@
-package repository
+package repositories
 
 import (
 	"github.com/rafiulgits/identity-access-control/infra/db"
