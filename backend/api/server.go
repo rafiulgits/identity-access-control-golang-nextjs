@@ -7,6 +7,7 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/rafiulgits/identity-access-control/api/handlers"
 	"github.com/rafiulgits/identity-access-control/infra"
 	"github.com/rafiulgits/identity-access-control/models/configs"
 )
@@ -51,6 +52,9 @@ func Start() {
 	}
 
 	middleware.ErrJWTMissing.Code = 401
+
+	handlers.NewCustomerHandler().RegisterEcho(echoServer)
+	handlers.NewVendorHandler().RegisterEcho(echoServer)
 
 	serverAddress := fmt.Sprintf(":%d", conf.ListenPort)
 	echoServer.Logger.Fatal(echoServer.Start(serverAddress))

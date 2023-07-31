@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/go-playground/validator/v10 v10.14.1
 	github.com/labstack/echo/v4 v4.11.1
+	github.com/rafiulgits/go-automapper v0.1.4
 	github.com/rs/zerolog v1.29.1
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 	gorm.io/driver/postgres v1.5.2
