@@ -9,12 +9,12 @@ import {
 } from "antd";
 import Link from "next/link";
 
-interface LayoutProps {
+interface AppLayoutProps {
   children?: React.ReactNode;
   hideTileMenu?: boolean;
 }
 
-export const Layout = (props: LayoutProps) => {
+export const AppLayout = (props: AppLayoutProps) => {
   const themeConfig = theme.useToken();
 
   return (
@@ -24,12 +24,17 @@ export const Layout = (props: LayoutProps) => {
           position: "fixed",
           zIndex: 1,
           width: "100%",
-          backgroundColor: themeConfig.token.colorFillSecondary,
+          backgroundColor: themeConfig.token.colorPrimary,
         }}
       >
         <Link href="/">
           <Space direction="horizontal" align="baseline">
-            <Avatar shape="square" size={30} src="/vercel.svg" />
+            <Avatar
+              style={{ backgroundColor: "white" }}
+              shape="square"
+              size={30}
+              src="/next.svg"
+            />
             <Typography.Title style={{ color: "white" }} level={5}>
               Identity & Access Control
             </Typography.Title>

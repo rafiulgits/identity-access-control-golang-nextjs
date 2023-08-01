@@ -72,6 +72,9 @@ func inspectDbError(err error) (string, int) {
 	} else if strings.Contains(err.Error(), "SQLSTATE 23503") {
 		code = 400
 		msg = "the insert or update value of a foreign key is invalid, please provide valid value"
+	} else if strings.Contains(err.Error(), "SQLSTATE 23505") {
+		code = 400
+		msg = "duplicate key value violates unique constraint"
 	}
 
 	return msg, code

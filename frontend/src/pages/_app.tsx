@@ -1,7 +1,31 @@
 import "antd/dist/reset.css";
 import "@/styles/globals.css";
+
 import type { AppProps } from "next/app";
+import { ConfigProvider } from "antd";
+import { Provider as StoreProvider } from "react-redux";
+import store from "@/store";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <StoreProvider store={store}>
+      <ConfigProvider
+        theme={{
+          token: {
+            fontSize: 12,
+            colorPrimary: "#1B1212",
+            colorPrimaryBg: "#adb5bd",
+            colorPrimaryHover: "#023020",
+            colorPrimaryBgHover: "#023020",
+            colorPrimaryActive: "#023020",
+            colorBgLayout: "#e9ecef",
+            colorBgBase: "#f8f9fa",
+            colorBgContainer: "#f8f9fa",
+          },
+        }}
+      >
+        <Component {...pageProps} />
+      </ConfigProvider>
+    </StoreProvider>
+  );
 }

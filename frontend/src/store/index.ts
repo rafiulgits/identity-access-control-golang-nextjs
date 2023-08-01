@@ -1,6 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { productReducer } from "./data/product";
+import { customerReducer } from "./data/customer";
+import { vendorReducer } from "./data/vendor";
 
-const rootReducer = combineReducers({});
+const rootReducer = combineReducers({
+  product: productReducer,
+  customer: customerReducer,
+  vendor: vendorReducer
+});
 
 const store = configureStore({
   reducer: rootReducer,
