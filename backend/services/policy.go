@@ -80,7 +80,7 @@ func (s *PolicyService) UpdatePolicy(data *dtos.PolicyUpsertDto) (*dtos.PolicyDt
 }
 
 func (s *PolicyService) GetAllPolicies() ([]*dtos.PolicyDto, *dtos.ErrorDto) {
-	policys, err := s.policyRepository.GetAll()
+	policys, err := s.policyRepository.Includes("Permissions").GetAll()
 	if err != nil {
 		infra.
 			GetInfra().Logger().Error().Str("layer", "service").Str("topic", "all policys").
