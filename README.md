@@ -122,3 +122,10 @@ interface UserPolicy {
   policyId: number; // pk, sk
 }
 ```
+
+---
+
+Roadmap
+
+- allow signin or not in user model
+- optional accounts array in user creation
