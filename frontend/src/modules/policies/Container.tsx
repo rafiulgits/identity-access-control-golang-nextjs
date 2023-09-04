@@ -6,8 +6,9 @@ import { ActionPanel } from "@/components/ActionPanel";
 import { Descriptions, Space, Table, Tag } from "antd";
 import { PermissionDto, PolicyDto } from "@/models/policy";
 import { TableActionContainer } from "@/components/TableActionContainer";
-import { permissions } from "@/util/values";
+import { permissionRecord, permissions } from "@/util/values";
 import { SearchControl } from "@/components/SearchControl";
+import { PolicyUpdateAction } from "./actions/PolicyUpdate";
 
 export const PoliciesContainer = () => {
   const { fetch, state } = usePolicies();
@@ -40,27 +41,16 @@ export const PoliciesContainer = () => {
                   <Descriptions column={1}>
                     {perms.map((perm, idx) => (
                       <Descriptions.Item
-                        style={{ padding: 0 }}
+                        style={{ paddingBottom: "2px" }}
                         key={idx + 1}
                         label={<b>{perm.module}</b>}
                       >
                         <Space direction="horizontal">
-                          {perm.access
-                            .toString()
-                            .split("")
-                            .flatMap((a, i) => {
-                              if (a === "0") {
-                                return [];
-                              }
-                              return (
-                                <Tag
-                                  style={{ margin: 0 }}
-                                  color="green-inverse"
-                                >
-                                  {permissions[i]}
-                                </Tag>
-                              );
-                            })}
+                          {perm.access.map((i) => (
+                            <Tag style={{ margin: 0 }} color="green-inverse">
+                              {permissionRecord[i]}
+                            </Tag>
+                          ))}
                         </Space>
                       </Descriptions.Item>
                     ))}
@@ -73,7 +63,9 @@ export const PoliciesContainer = () => {
               width: "25%",
               dataIndex: "action",
               render: (_: any, row: PolicyDto) => (
-                <TableActionContainer key={row.id}></TableActionContainer>
+                <TableActionContainer key={row.id}>
+                  <PolicyUpdateAction policy={row} />
+                </TableActionContainer>
               ),
             },
           ]}

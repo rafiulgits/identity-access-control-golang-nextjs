@@ -1,10 +1,10 @@
-import { PolicyDto } from "@/models/policy";
+import { PolicyUpsertDto } from "@/models/policy";
 import { BaseFormProps } from "@/util/common-props";
 import { modules, permissions } from "@/util/values";
 import { DeleteFilled, PlusOutlined } from "@ant-design/icons";
 import { Button, Col, Form, Input, Row, Select } from "antd";
 
-interface Props extends BaseFormProps<PolicyDto> {}
+interface Props extends BaseFormProps<PolicyUpsertDto> {}
 
 export const PolicyUpsertForm = (props: Props) => {
   return (
@@ -16,8 +16,8 @@ export const PolicyUpsertForm = (props: Props) => {
       <Form.List name={"permissions"}>
         {(fields, { add, remove }) => (
           <>
-            {fields.map((field, idx) => (
-              <Row gutter={[6, 6]} key={idx + 1}>
+            {fields.map((field) => (
+              <Row gutter={[6, 6]} key={field.name}>
                 <Col span={6}>
                   <Form.Item
                     rules={[{ required: true }]}
@@ -32,11 +32,11 @@ export const PolicyUpsertForm = (props: Props) => {
                 <Col span={15}>
                   <Form.Item
                     rules={[{ required: true }]}
-                    name={[field.name, "permission"]}
+                    name={[field.name, "access"]}
                   >
                     <Select
                       placeholder="Permissions"
-                      options={permissions.map((p) => ({ label: p, value: p }))}
+                      options={permissions}
                       mode="multiple"
                     />
                   </Form.Item>

@@ -1,12 +1,15 @@
 package dtos
 
-import "github.com/rafiulgits/identity-access-control/models/validator"
+import (
+	"github.com/rafiulgits/identity-access-control/models/jsons"
+	"github.com/rafiulgits/identity-access-control/models/validator"
+)
 
 type PermissionDto struct {
-	ID       int    `json:"id"`
-	PolicyID int    `json:"policyId"`
-	Access   int    `json:"access"`
-	Module   string `json:"module"`
+	ID       int               `json:"id"`
+	PolicyID int               `json:"policyId"`
+	Access   jsons.StringArray `json:"access"`
+	Module   string            `json:"module"`
 	*BaseLogDto
 }
 
@@ -28,6 +31,6 @@ func (p *PolicyUpsertDto) Validate() error {
 }
 
 type PolicyUpsertPermissionDto struct {
-	Access int    `json:"access" validate:"gt=0"`
-	Module string `json:"module" validate:"required,max=30"`
+	Access jsons.StringArray `json:"access" validate:"gt=0"`
+	Module string            `json:"module" validate:"required,max=30"`
 }

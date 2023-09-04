@@ -4,7 +4,7 @@ import { LogDto } from "./common"
 export interface PermissionDto extends LogDto {
   id: number
   policyId: number
-  access: number
+  access: string[]
   module: number
 }
 
@@ -21,6 +21,6 @@ export interface PolicyUpsertDto {
 }
 
 export interface PolicyUpsertPermissionDto {
-  access: number
+  access: string[]
   module: string
 }

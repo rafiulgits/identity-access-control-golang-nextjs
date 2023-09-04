@@ -1,11 +1,29 @@
-export const modules = ["vendor", "customer", "products"]
+export const modules = ["vendor", "customer", "product"]
 
-export const permissions = ["create", "read", "update", "delete"]
+export const permissions = [
+  {
+    value: "c",
+    key: "c",
+    label: "create"
+  },
+  {
+    value: "r",
+    "key": "r",
+    label: "read",
 
-export const permissionIndex: Record<string, number> = {
-  "create": 0,
-  "read": 1,
-  "update": 2,
-  "delete": 3
+  }, {
+    value: "u",
+    key: "u",
+    label: "update"
+
+  }, {
+    value: "d",
+    key: "d",
+    label: "delete"
+
+  }
+]
+
+export const permissionRecord: Record<string, string> = {
+  "c": "create", "r": "read", "u": "update", "d": "delete", "create": "c", "read": "r", "update": 'u', "delete": "d"
 }
-

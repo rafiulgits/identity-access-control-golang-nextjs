@@ -9,6 +9,7 @@ import (
 	"github.com/rafiulgits/identity-access-control/models/dtos"
 	"github.com/rafiulgits/identity-access-control/repositories"
 	"github.com/rafiulgits/identity-access-control/util"
+	"gorm.io/gorm"
 )
 
 type IPolicyService interface {
@@ -67,15 +68,25 @@ func (s *PolicyService) UpdatePolicy(data *dtos.PolicyUpsertDto) (*dtos.PolicyDt
 	}
 	automapper.Map(data, policy)
 	policy.LastUpdatedTime = time.Now().UnixMilli()
-	updatedPolicy, err := s.policyRepository.Update(policy)
-	if err != nil {
+
+	txnErr := infra.GetInfra().GetDatabase().Transaction(func(tx *gorm.DB) error {
+		// removing previous permissions of that policy
+		if err := tx.Where("policy_id=?", data.ID).Delete(&domains.Permission{}).Error; err != nil {
+			return err
+		}
+		if err := tx.Save(policy).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	if txnErr != nil {
 		infra.
 			GetInfra().Logger().Error().Str("layer", "service").Str("topic", "policy update").
-			Str("loc", util.GetExecLocation()).Any("payload", data).Err(err).Msg("database error while updating policy")
-		return nil, dtos.NewDatabaseError(err)
+			Str("loc", util.GetExecLocation()).Any("payload", data).Err(txnErr).Msg("database error while updating policy")
+		return nil, dtos.NewDatabaseError(txnErr)
 	}
 	policyDto := &dtos.PolicyDto{}
-	automapper.Map(updatedPolicy, policyDto)
+	automapper.Map(policy, policyDto)
 	return policyDto, nil
 }
 
@@ -103,11 +114,20 @@ func (s *PolicyService) DeletePolicy(id int) *dtos.ErrorDto {
 			Any("payload", id).Err(err).Msg("datebase error while checking policy existance by id")
 		return dtos.NewDatabaseError(err)
 	}
-	if err := s.policyRepository.Delete(id); err != nil {
+	txnErr := infra.GetInfra().GetDatabase().Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("policy_id=?", id).Delete(&domains.Permission{}).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&domains.Policy{ID: id}).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	if txnErr != nil {
 		infra.
 			GetInfra().Logger().Error().Str("layer", "service").Str("topic", "policy delete").Str("loc", util.GetExecLocation()).
-			Any("payload", id).Err(err).Msg("datebase error while deleting policy")
-		return dtos.NewDatabaseError(err)
+			Any("payload", id).Err(txnErr).Msg("datebase error while deleting policy")
+		return dtos.NewDatabaseError(txnErr)
 	}
 	return nil
 }
