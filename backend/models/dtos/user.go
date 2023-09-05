@@ -43,7 +43,8 @@ func (u *UserCreateDto) Validate() error {
 }
 
 type UserPolicyDto struct {
-	Policy *PolicyDto `json:"policy"`
+	PolicyID int            `json:"policyId"`
+	Policy   *PolicyBaseDto `json:"policy"`
 }
 
 type AccountDto struct {

@@ -13,6 +13,11 @@ type PermissionDto struct {
 	*BaseLogDto
 }
 
+type PolicyBaseDto struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
 type PolicyDto struct {
 	ID          int              `json:"id"`
 	Name        string           `json:"name"`

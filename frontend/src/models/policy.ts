@@ -8,9 +8,11 @@ export interface PermissionDto extends LogDto {
   module: number
 }
 
-export interface PolicyDto extends LogDto {
+export interface PolicyBaseDto {
   id: number
   name: string
+}
+export interface PolicyDto extends PolicyBaseDto, LogDto {
   permissions: Array<PermissionDto>
 }
 

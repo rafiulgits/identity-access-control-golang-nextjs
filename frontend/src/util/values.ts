@@ -27,3 +27,8 @@ export const permissions = [
 export const permissionRecord: Record<string, string> = {
   "c": "create", "r": "read", "u": "update", "d": "delete", "create": "c", "read": "r", "update": 'u', "delete": "d"
 }
+
+
+export const authProviders = [
+  "credential", "google", "microsoft"
+]

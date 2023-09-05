@@ -3,12 +3,14 @@ import { productReducer } from "./data/product";
 import { customerReducer } from "./data/customer";
 import { vendorReducer } from "./data/vendor";
 import { policyReducer } from "./data/policy";
+import { userReducer } from "./data/user";
 
 const rootReducer = combineReducers({
   product: productReducer,
   customer: customerReducer,
   vendor: vendorReducer,
   policy: policyReducer,
+  user: userReducer
 });
 
 const store = configureStore({
