@@ -1,7 +1,7 @@
 import { useToggle } from "@/hooks";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, message } from "antd";
-import { UserCreateForm } from "../forms/Create";
+import { UserCreateForm } from "../forms/UserCreate";
 import { UserCreateDto } from "@/models/user";
 import { FormModal } from "@/components/FormModal";
 import { useUsers } from "@/store/data/user";

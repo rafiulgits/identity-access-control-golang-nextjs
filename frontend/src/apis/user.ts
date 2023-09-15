@@ -1,4 +1,4 @@
-import { UserCreateDto } from "@/models/user";
+import { AccountUpsertDto, UserCreateDto, UserUpdateDto } from "@/models/user";
 import { Api } from "./api-manager";
 
 export const UserApi = {
@@ -8,10 +8,19 @@ export const UserApi = {
   getAll: () => {
     return Api().get("/users");
   },
-  update: (data: any) => {
+  update: (data: UserUpdateDto) => {
     return Api().put(`/users/${data.id}`, JSON.stringify(data));
   },
   delete: (id: number) => {
     return Api().delete(`/users/${id}`);
   },
+  createAccount: (data: AccountUpsertDto) => {
+    return Api().post(`/users/${data.userId}/accounts`, JSON.stringify(data))
+  },
+  updateAccount: (data: AccountUpsertDto) => {
+    return Api().put(`/users/${data.userId}/accounts/${data.id}`, JSON.stringify(data))
+  },
+  deleteAccount: (userId: number, accountId: number) => {
+    return Api().delete(`/users/${userId}/accounts/${accountId}`)
+  }
 }

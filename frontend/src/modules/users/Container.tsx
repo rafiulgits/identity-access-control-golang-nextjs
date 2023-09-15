@@ -1,6 +1,6 @@
 import { ActionPanel } from "@/components/ActionPanel";
 import { AppLayout } from "@/components/Layout";
-import { UserCreateAction } from "./actions/Create";
+import { UserCreateAction } from "./actions/UserCreate";
 import { usePolicies } from "@/store/data/policy";
 import { useEffect } from "react";
 import { useUsers } from "@/store/data/user";
@@ -8,6 +8,7 @@ import { SearchControl } from "@/components/SearchControl";
 import { Space, Table } from "antd";
 import { AccountDto, UserDto, UserPolicyDto } from "@/models/user";
 import { TableActionContainer } from "@/components/TableActionContainer";
+import { UserProfileView } from "./views/Profile";
 
 export const UsersContainer = () => {
   const { fetch: fetchPolicies } = usePolicies();
@@ -64,7 +65,9 @@ export const UsersContainer = () => {
               title: "Action",
               dataIndex: "action",
               render: (_: any, row: UserDto) => (
-                <TableActionContainer key={row.id}></TableActionContainer>
+                <TableActionContainer key={row.id}>
+                  <UserProfileView user={row} />
+                </TableActionContainer>
               ),
             },
           ]}

@@ -48,8 +48,10 @@ type UserPolicyDto struct {
 }
 
 type AccountDto struct {
+	ID           int    `json:"id"`
 	AuthProvider string `json:"authProvider"`
 	Name         string `json:"name"`
+	UserID       int    `json:"userId"`
 }
 
 type UserDto struct {
@@ -57,4 +59,24 @@ type UserDto struct {
 	Name     string           `json:"name"`
 	Policies []*UserPolicyDto `json:"policies"`
 	Accounts []*AccountDto    `json:"accounts"`
+}
+
+type UserUpdateDto struct {
+	ID        int    `json:"id" validate:"gt=0"`
+	Name      string `json:"name" validate:"required,max=80"`
+	PolicyIDs []int  `json:"policyIds"`
+}
+
+func (u *UserUpdateDto) Validate() error {
+	return validator.Validate.Struct(u)
+}
+
+type AccountUpsertDto struct {
+	ID     int `json:"id"`
+	UserID int `json:"userId" validate:"gt=0"`
+	*UserCreateAccountDto
+}
+
+func (a *AccountUpsertDto) Validate() error {
+	return validator.Validate.Struct(a)
 }
