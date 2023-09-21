@@ -1,6 +1,7 @@
 import {
   Layout as AntLayout,
   Avatar,
+  Button,
   Col,
   Row,
   Space,
@@ -27,19 +28,26 @@ export const AppLayout = (props: AppLayoutProps) => {
           backgroundColor: themeConfig.token.colorPrimary,
         }}
       >
-        <Link href="/">
-          <Space direction="horizontal" align="baseline">
-            <Avatar
-              style={{ backgroundColor: "white" }}
-              shape="square"
-              size={30}
-              src="/next.svg"
-            />
-            <Typography.Title style={{ color: "white" }} level={5}>
-              Identity & Access Control
-            </Typography.Title>
-          </Space>
-        </Link>
+        <Row justify="space-between">
+          <Col>
+            <Link href="/">
+              <Space direction="horizontal" align="baseline">
+                <Avatar
+                  style={{ backgroundColor: "white" }}
+                  shape="square"
+                  size={30}
+                  src="/next.svg"
+                />
+                <Typography.Title style={{ color: "white" }} level={5}>
+                  Identity & Access Control
+                </Typography.Title>
+              </Space>
+            </Link>
+          </Col>
+          <Col>
+            <Button>Login</Button>
+          </Col>
+        </Row>
       </AntLayout.Header>
       <AntLayout style={{ minHeight: "100vh" }}>
         <AntLayout>

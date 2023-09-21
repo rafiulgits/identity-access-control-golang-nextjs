@@ -58,6 +58,7 @@ func Start() {
 	handlers.NewProductHandler().RegisterEcho(echoServer)
 	handlers.NewPolicyHandler().RegisterEcho(echoServer)
 	handlers.NewUserHandler().RegisterEcho(echoServer)
+	handlers.NewAuthHandler().RegisterEcho(echoServer)
 
 	serverAddress := fmt.Sprintf(":%d", conf.ListenPort)
 	echoServer.Logger.Fatal(echoServer.Start(serverAddress))
