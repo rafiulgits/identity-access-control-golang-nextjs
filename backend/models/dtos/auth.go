@@ -14,3 +14,8 @@ func (c *CredentialLoginDto) Validate() error {
 type TokenDto struct {
 	Bearer string `json:"bearer"`
 }
+
+type OAuthDto struct {
+	Provider    string `json:"provider"`
+	AccessToken string `json:"accessToken"`
+}

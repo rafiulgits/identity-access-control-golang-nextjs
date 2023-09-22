@@ -16,6 +16,7 @@ var _userPreloads = []string{"Accounts", "Policies.Policy.Permissions"}
 type IUserService interface {
 	CreateUser(data *dtos.UserCreateDto) (*dtos.UserDto, *dtos.ErrorDto)
 	GetAllUsers() ([]*dtos.UserDto, *dtos.ErrorDto)
+	GetUser(id int) (*dtos.UserDto, *dtos.ErrorDto)
 	UpdateUser(data *dtos.UserUpdateDto) (*dtos.UserDto, *dtos.ErrorDto)
 	DeleteUser(id int) *dtos.ErrorDto
 	CreateUserAccount(data *dtos.AccountUpsertDto) (*dtos.AccountDto, *dtos.ErrorDto)
@@ -108,19 +109,6 @@ func (s *UserService) UpdateUser(data *dtos.UserUpdateDto) (*dtos.UserDto, *dtos
 	return s.GetUser(user.ID)
 }
 
-func (s *UserService) GetUser(id int) (*dtos.UserDto, *dtos.ErrorDto) {
-	user, err := s.userRepository.Includes(_userPreloads...).Get(id)
-	if err != nil {
-		infra.
-			GetInfra().Logger().Error().Str("layer", "service").Str("topic", "get user").
-			Str("loc", util.GetExecLocation()).Err(err).Msg("datebase error while fetching user by id")
-		return nil, dtos.NewDatabaseError(err)
-	}
-	userDto := &dtos.UserDto{}
-	automapper.Map(user, userDto)
-	return userDto, nil
-}
-
 func (s *UserService) GetAllUsers() ([]*dtos.UserDto, *dtos.ErrorDto) {
 	users, err := s.userRepository.Includes(_userPreloads...).GetAll()
 	if err != nil {
@@ -132,6 +120,19 @@ func (s *UserService) GetAllUsers() ([]*dtos.UserDto, *dtos.ErrorDto) {
 	userDtos := make([]*dtos.UserDto, 0)
 	automapper.Map(users, &userDtos)
 	return userDtos, nil
+}
+
+func (s *UserService) GetUser(id int) (*dtos.UserDto, *dtos.ErrorDto) {
+	user, err := s.userRepository.Includes(_userPreloads...).Get(id)
+	if err != nil {
+		infra.
+			GetInfra().Logger().Error().Str("layer", "service").Str("topic", "get user").
+			Str("loc", util.GetExecLocation()).Err(err).Msg("datebase error while fetching user by id")
+		return nil, dtos.NewDatabaseError(err)
+	}
+	userDto := &dtos.UserDto{}
+	automapper.Map(user, userDto)
+	return userDto, nil
 }
 
 func (s *UserService) DeleteUser(id int) *dtos.ErrorDto {
