@@ -1,4 +1,4 @@
-export const modules = ["vendor", "customer", "product"]
+export const modules = ["vendor", "customer", "product", "user", "policy"]
 
 export const permissions = [
   {

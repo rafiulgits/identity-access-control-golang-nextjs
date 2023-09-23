@@ -1,17 +1,17 @@
 import { VendorUpsertDto } from "@/models/vendor";
-import { Api } from "./api-manager";
+import { AuthenticApi } from "./api-manager";
 
 export const VendorApi = {
   create: (data: VendorUpsertDto) => {
-    return Api().post("/vendors", JSON.stringify(data));
+    return AuthenticApi().post("/vendors", JSON.stringify(data));
   },
   getAll: () => {
-    return Api().get("/vendors");
+    return AuthenticApi().get("/vendors");
   },
   update: (data: VendorUpsertDto) => {
-    return Api().put(`/vendors/${data.id}`, JSON.stringify(data));
+    return AuthenticApi().put(`/vendors/${data.id}`, JSON.stringify(data));
   },
   delete: (id: number) => {
-    return Api().delete(`/vendors/${id}`);
+    return AuthenticApi().delete(`/vendors/${id}`);
   },
 }

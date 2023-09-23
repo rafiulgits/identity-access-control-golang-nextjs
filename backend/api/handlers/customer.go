@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rafiulgits/identity-access-control/api/auth"
 	"github.com/rafiulgits/identity-access-control/infra"
 	"github.com/rafiulgits/identity-access-control/models/dtos"
 	"github.com/rafiulgits/identity-access-control/parser"
@@ -22,13 +23,12 @@ func NewCustomerHandler() *CustomerHandler {
 }
 
 func (h *CustomerHandler) RegisterEcho(e *echo.Echo) {
-	router := e.Group("/customers")
+	router := e.Group("/customers", auth.JwtAuth)
 
-	router.GET("", h.getAllCustomers)
-	router.POST("", h.createCustomer)
-
-	router.PUT("/:customerId", h.updateCustomer)
-	router.DELETE("/:customerId", h.deleteCustomer)
+	router.POST("", h.createCustomer, auth.CheckIfJwtUserHasPermission(util.CustomerModuleName, util.AccessCreate))
+	router.GET("", h.getAllCustomers, auth.CheckIfJwtUserHasPermission(util.CustomerModuleName, util.AccessRead))
+	router.PUT("/:customerId", h.updateCustomer, auth.CheckIfJwtUserHasPermission(util.CustomerModuleName, util.AccessUpdate))
+	router.DELETE("/:customerId", h.deleteCustomer, auth.CheckIfJwtUserHasPermission(util.CustomerModuleName, util.AccessDelete))
 }
 
 func (h *CustomerHandler) getAllCustomers(ctx echo.Context) error {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rafiulgits/identity-access-control/api/auth"
 	"github.com/rafiulgits/identity-access-control/infra"
 	"github.com/rafiulgits/identity-access-control/models/dtos"
 	"github.com/rafiulgits/identity-access-control/parser"
@@ -22,13 +23,12 @@ func NewProductHandler() *ProductHandler {
 }
 
 func (h *ProductHandler) RegisterEcho(e *echo.Echo) {
-	router := e.Group("/products")
+	router := e.Group("/products", auth.JwtAuth)
 
-	router.GET("", h.getAllProducts)
-	router.POST("", h.createProduct)
-
-	router.PUT("/:productId", h.updateProduct)
-	router.DELETE("/:productId", h.deleteProduct)
+	router.POST("", h.createProduct, auth.CheckIfJwtUserHasPermission(util.ProductModuleName, util.AccessCreate))
+	router.GET("", h.getAllProducts, auth.CheckIfJwtUserHasPermission(util.ProductModuleName, util.AccessRead))
+	router.PUT("/:productId", h.updateProduct, auth.CheckIfJwtUserHasPermission(util.ProductModuleName, util.AccessUpdate))
+	router.DELETE("/:productId", h.deleteProduct, auth.CheckIfJwtUserHasPermission(util.ProductModuleName, util.AccessDelete))
 }
 
 func (h *ProductHandler) getAllProducts(ctx echo.Context) error {

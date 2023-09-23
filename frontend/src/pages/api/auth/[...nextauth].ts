@@ -37,7 +37,6 @@ export const authOptions: NextAuthOptions = {
 
     async jwt(ctx: any) {
       const { account, token } = ctx;
-
       if (account) {
         if (GoogleAuth.canProvide(account.provider)) {
           const profile = await GoogleAuth.getProfile(ctx);
@@ -66,6 +65,7 @@ export const authOptions: NextAuthOptions = {
       session.user.name = token.name;
       session.user.policies = token.policies;
       session.user.accounts = token.accounts
+      session.accessToken = token.accessToken
 
       return session;
     },

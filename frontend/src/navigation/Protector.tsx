@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Redirect } from "./Redirect";
+import { MemoryManager } from "@/util/memory-manager";
+import { Keys } from "@/util/keys";
 
 const LOADING_SCREEN = 1;
 const PAGE_SCREEN = 2;
@@ -10,7 +12,7 @@ const REDIRECT = 3;
 
 export const withProtected = (Component: React.FC) => {
   return function WithProtected(props: any) {
-    const { status } = useSession();
+    const { status, data } = useSession();
     const router = useRouter();
 
     const [screen, setScreen] = useState(LOADING_SCREEN);
@@ -32,6 +34,7 @@ export const withProtected = (Component: React.FC) => {
         setScreen(REDIRECT);
       }
       if (status === "authenticated") {
+        MemoryManager.setItem(Keys.BearerToken, (data as any).accessToken);
         setScreen(PAGE_SCREEN);
       }
     }, [status]);

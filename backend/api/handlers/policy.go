@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rafiulgits/identity-access-control/api/auth"
 	"github.com/rafiulgits/identity-access-control/infra"
 	"github.com/rafiulgits/identity-access-control/models/dtos"
 	"github.com/rafiulgits/identity-access-control/parser"
@@ -22,16 +23,15 @@ func NewPolicyHandler() *PolicyHandler {
 }
 
 func (h *PolicyHandler) RegisterEcho(e *echo.Echo) {
-	router := e.Group("/policies")
+	router := e.Group("/policies", auth.JwtAuth)
 
-	router.GET("", h.getAllPolicys)
-	router.POST("", h.createPolicy)
-
-	router.PUT("/:policyId", h.updatePolicy)
-	router.DELETE("/:policyId", h.deletePolicy)
+	router.POST("", h.createPolicy, auth.CheckIfJwtUserHasPermission(util.PolicyModuleName, util.AccessCreate))
+	router.GET("", h.getAllPolicies, auth.CheckIfJwtUserHasPermission(util.PolicyModuleName, util.AccessRead))
+	router.PUT("/:policyId", h.updatePolicy, auth.CheckIfJwtUserHasPermission(util.PolicyModuleName, util.AccessUpdate))
+	router.DELETE("/:policyId", h.deletePolicy, auth.CheckIfJwtUserHasPermission(util.PolicyModuleName, util.AccessDelete))
 }
 
-func (h *PolicyHandler) getAllPolicys(ctx echo.Context) error {
+func (h *PolicyHandler) getAllPolicies(ctx echo.Context) error {
 	policys, err := h.policyService.GetAllPolicies()
 	if err != nil {
 		return ctx.JSON(err.ErrorCode, err)

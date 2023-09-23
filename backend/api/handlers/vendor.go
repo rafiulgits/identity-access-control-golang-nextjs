@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rafiulgits/identity-access-control/api/auth"
 	"github.com/rafiulgits/identity-access-control/infra"
 	"github.com/rafiulgits/identity-access-control/models/dtos"
 	"github.com/rafiulgits/identity-access-control/parser"
@@ -22,13 +23,12 @@ func NewVendorHandler() *VendorHandler {
 }
 
 func (h *VendorHandler) RegisterEcho(e *echo.Echo) {
-	router := e.Group("/vendors")
+	router := e.Group("/vendors", auth.JwtAuth)
 
-	router.GET("", h.getAllVendors)
-	router.POST("", h.createVendor)
-
-	router.PUT("/:vendorId", h.updateVendor)
-	router.DELETE("/:vendorId", h.deleteVendor)
+	router.POST("", h.createVendor, auth.CheckIfJwtUserHasPermission(util.VendorModuleName, util.AccessCreate))
+	router.GET("", h.getAllVendors, auth.CheckIfJwtUserHasPermission(util.VendorModuleName, util.AccessRead))
+	router.PUT("/:vendorId", h.updateVendor, auth.CheckIfJwtUserHasPermission(util.VendorModuleName, util.AccessUpdate))
+	router.DELETE("/:vendorId", h.deleteVendor, auth.CheckIfJwtUserHasPermission(util.VendorModuleName, util.AccessDelete))
 }
 
 func (h *VendorHandler) getAllVendors(ctx echo.Context) error {

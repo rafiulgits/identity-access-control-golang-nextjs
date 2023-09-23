@@ -16,6 +16,7 @@ export default function App({
       refetchWhenOffline={false}
       session={session}
       refetchInterval={300} // 5 min
+      refetchOnWindowFocus={false}
     >
       <StoreProvider store={store}>
         <ConfigProvider

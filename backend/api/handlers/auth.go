@@ -28,7 +28,7 @@ func (h *AuthHandler) RegisterEcho(e *echo.Echo) {
 	router.POST("/login/credential", h.credentialLogin)
 	router.POST("/login/google", h.googleLogin)
 	router.GET("/profile", h.getUserProfile, auth.JwtAuth)
-	router.GET("/verify", h.verify, auth.JwtAuth, auth.CheckIfJwtUserHasPermission(util.CustomerModuleName, util.AccessRead))
+
 }
 
 func (h *AuthHandler) credentialLogin(ctx echo.Context) error {
@@ -68,8 +68,4 @@ func (h *AuthHandler) getUserProfile(ctx echo.Context) error {
 		return ctx.JSON(err.ErrorCode, err)
 	}
 	return ctx.JSON(http.StatusOK, user)
-}
-
-func (h *AuthHandler) verify(ctx echo.Context) error {
-	return ctx.JSON(200, map[string]string{"res": "ok"})
 }

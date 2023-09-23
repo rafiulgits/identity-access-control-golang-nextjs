@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/rafiulgits/identity-access-control/api/auth"
 	"github.com/rafiulgits/identity-access-control/infra"
 	"github.com/rafiulgits/identity-access-control/models/dtos"
 	"github.com/rafiulgits/identity-access-control/parser"
@@ -22,17 +23,17 @@ func NewUserHandler() *UserHandler {
 }
 
 func (h *UserHandler) RegisterEcho(e *echo.Echo) {
-	router := e.Group("/users")
+	router := e.Group("/users", auth.JwtAuth)
 
-	router.GET("", h.getAllUsers)
-	router.POST("", h.createUser)
-	router.DELETE("/:userId", h.deleteUser)
-	router.PUT("/:userId", h.updateUser)
+	router.POST("", h.createUser, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessCreate))
+	router.GET("", h.getAllUsers, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessRead))
+	router.PUT("/:userId", h.updateUser, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessUpdate))
+	router.DELETE("/:userId", h.deleteUser, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessDelete))
 
 	accountRouter := router.Group("/:userId/accounts")
-	accountRouter.POST("", h.createUserAccount)
-	accountRouter.PUT("/:accountId", h.updateUserAccount)
-	accountRouter.DELETE("/:accountId", h.deleteUserAccount)
+	accountRouter.POST("", h.createUserAccount, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessCreate))
+	accountRouter.PUT("/:accountId", h.updateUserAccount, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessUpdate))
+	accountRouter.DELETE("/:accountId", h.deleteUserAccount, auth.CheckIfJwtUserHasPermission(util.UserModuleName, util.AccessDelete))
 }
 
 func (h *UserHandler) getAllUsers(ctx echo.Context) error {

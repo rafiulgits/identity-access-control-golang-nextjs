@@ -1,6 +1,7 @@
 import { AppLayout } from "@/components/Layout";
 import { useUser } from "@/hooks/user";
 import { Card, Col, Descriptions, Row, Space, Tag } from "antd";
+import { useSession } from "next-auth/react";
 
 export const ProfileContainer = () => {
   const { user } = useUser();
