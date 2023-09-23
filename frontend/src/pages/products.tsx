@@ -1,5 +1,6 @@
 import { AppLayout } from "@/components/Layout";
 import { ProductsContainer } from "@/modules/products/Container";
+import { withProtected } from "@/navigation/Protector";
 import { NextPage } from "next";
 
 const Page: NextPage = () => {
@@ -10,4 +11,4 @@ const Page: NextPage = () => {
   );
 };
 
-export default Page;
+export default withProtected(Page);

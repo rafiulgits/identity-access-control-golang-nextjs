@@ -1,13 +1,20 @@
 import {
+  LoginOutlined,
+  LogoutOutlined,
+  ProfileOutlined,
+} from "@ant-design/icons";
+import {
   Layout as AntLayout,
   Avatar,
   Button,
   Col,
+  Dropdown,
   Row,
   Space,
   Typography,
   theme,
 } from "antd";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 interface AppLayoutProps {
@@ -15,8 +22,17 @@ interface AppLayoutProps {
   hideTileMenu?: boolean;
 }
 
+const managementMenu = [
+  "Vendors",
+  "Customers",
+  "Users",
+  "Products",
+  "Policies",
+];
+
 export const AppLayout = (props: AppLayoutProps) => {
   const themeConfig = theme.useToken();
+  const { status } = useSession();
 
   return (
     <AntLayout>
@@ -44,8 +60,35 @@ export const AppLayout = (props: AppLayoutProps) => {
               </Space>
             </Link>
           </Col>
+
           <Col>
-            <Button>Login</Button>
+            {status === "authenticated" && (
+              <Space>
+                <Dropdown
+                  menu={{
+                    items: managementMenu.map((i) => ({
+                      label: <Link href={`/${i.toLowerCase()}`}>{i}</Link>,
+                      key: i,
+                    })),
+                  }}
+                >
+                  <Button>Management</Button>
+                </Dropdown>
+
+                <Button icon={<ProfileOutlined />} href="/profile">
+                  Profile
+                </Button>
+                <Button icon={<LogoutOutlined />} href="/auth/logout">
+                  Logout
+                </Button>
+              </Space>
+            )}
+            {status === "unauthenticated" && (
+              <Button icon={<LoginOutlined />} href="/auth/login">
+                Login
+              </Button>
+            )}
+            {status === "loading" && <Button loading>Verifying</Button>}
           </Col>
         </Row>
       </AntLayout.Header>

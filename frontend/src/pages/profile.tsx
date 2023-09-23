@@ -1,9 +1,9 @@
+import { ProfileContainer } from "@/modules/profile/Container";
+import { withProtected } from "@/navigation/Protector";
 import { NextPage } from "next";
-import { useSession } from "next-auth/react";
 
 const Page: NextPage = () => {
-  const session = useSession();
-  return <div>{JSON.stringify(session)}</div>;
+  return <ProfileContainer />;
 };
 
-export default Page;
+export default withProtected(Page);

@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var _userPreloads = []string{"Accounts", "Policies.Policy.Permissions"}
+var _userPreloads = []string{"Accounts", "Policies.Policy"}
 
 type IUserService interface {
 	CreateUser(data *dtos.UserCreateDto) (*dtos.UserDto, *dtos.ErrorDto)

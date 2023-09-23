@@ -12,7 +12,11 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps) {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider
+      refetchWhenOffline={false}
+      session={session}
+      refetchInterval={300} // 5 min
+    >
       <StoreProvider store={store}>
         <ConfigProvider
           theme={{
