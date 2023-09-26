@@ -22,7 +22,6 @@ export const MicrosoftLoginAction = () => {
     <Button
       loading={status === "loading"}
       type="primary"
-      disabled={true}
       icon={<Icon component={MicrosoftSvg} />}
       onClick={() => {
         signIn("microsoft");

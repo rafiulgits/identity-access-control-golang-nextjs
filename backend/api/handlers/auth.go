@@ -27,6 +27,7 @@ func (h *AuthHandler) RegisterEcho(e *echo.Echo) {
 	router := e.Group("/auth")
 	router.POST("/login/credential", h.credentialLogin)
 	router.POST("/login/google", h.googleLogin)
+	router.POST("/login/microsoft", h.microsoftLogin)
 	router.GET("/profile", h.getUserProfile, auth.JwtAuth)
 
 }
@@ -55,6 +56,21 @@ func (h *AuthHandler) googleLogin(ctx echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	token, err := h.authService.GoogleLogin(body)
+	if err != nil {
+		return ctx.JSON(err.ErrorCode, err)
+	}
+	return ctx.JSON(http.StatusOK, token)
+}
+
+func (h *AuthHandler) microsoftLogin(ctx echo.Context) error {
+	body := &dtos.OAuthDto{}
+	if err := ctx.Bind(body); err != nil {
+		infra.
+			GetInfra().Logger().Error().Str("layer", "handler").Str("topic", "google login").
+			Str("loc", util.GetExecLocation()).Err(err).Msg("failed to parse request body")
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	token, err := h.authService.MicrosoftLogin(body)
 	if err != nil {
 		return ctx.JSON(err.ErrorCode, err)
 	}

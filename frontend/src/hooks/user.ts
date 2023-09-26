@@ -5,8 +5,10 @@ export const useUser = () => {
   const { data } = useSession()
 
 
-  const hasPermission = () => {
-
+  const hasPermission = (module: string, access: string) => {
+    if (!data) {
+      return false
+    }
   }
 
 

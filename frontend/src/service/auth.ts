@@ -30,6 +30,21 @@ export const AuthService = {
     }
   },
 
+  microsoftLogin: async (data: OAuthDto) => {
+    try {
+      const res = await axios.post(
+        `${ApiServer}/auth/login/microsoft`,
+        JSON.stringify(data),
+        {
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+      return res.data;
+    } catch (err: any) {
+      throwAxiosError(err);
+    }
+  },
+
   credentialLogin: async (data: CredentialLoginDto) => {
     try {
       const res = await axios.post(

@@ -1,15 +1,20 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
+import AzureAD from "next-auth/providers/azure-ad";
 import { GoogleAuth } from "@/auth/google";
 import { CredentialAuth } from "@/auth/credential";
 import { AuthService } from "@/service/auth";
+import { MicrosoftAuth } from "@/auth/microsoft";
+
+
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider(GoogleAuth.config),
     CredentialsProvider(CredentialAuth.config),
+    AzureAD(MicrosoftAuth.config)
   ],
 
   callbacks: {
@@ -19,8 +24,9 @@ export const authOptions: NextAuthOptions = {
         return GoogleAuth.handle(ctx);
       } else if (CredentialAuth.canProvide(account.provider)) {
         return CredentialAuth.handle(ctx);
+      } else if (MicrosoftAuth.canProvide(account.provider)) {
+        return MicrosoftAuth.handle(ctx)
       }
-
       return "/auth/error";
     },
 
@@ -44,6 +50,10 @@ export const authOptions: NextAuthOptions = {
         }
         if (CredentialAuth.canProvide(account.provider)) {
           const profile = await CredentialAuth.getProfile(ctx);
+          return profile;
+        }
+        if (MicrosoftAuth.canProvide(account.provider)) {
+          const profile = await MicrosoftAuth.getProfile(ctx);
           return profile;
         }
         throw new Error("no authentication provider found");

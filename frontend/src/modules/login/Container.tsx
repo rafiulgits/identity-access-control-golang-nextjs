@@ -14,7 +14,12 @@ export const LoginContainer = () => {
       <Row justify="center">
         <Col lg={8} md={10} sm={14} xs={22}>
           <Card>
-            {error && <Alert message={error} />}
+            {error && (
+              <div>
+                <Alert showIcon type="error" message={error} />
+                <br />
+              </div>
+            )}
             <Typography.Title level={5} style={{ textAlign: "center" }}>
               Authenticate
             </Typography.Title>
