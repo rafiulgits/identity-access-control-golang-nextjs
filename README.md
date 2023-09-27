@@ -1,131 +1,30 @@
-Identity & Access Control
+# Identity Access Control
 
-There should be 2 types of users
+This is an experimental project to implement permission based user access control management in **Golang** X  **NextJS**. This project is using **Google** & **Microsoft** signing feature to allow user to login with their google and microsoft account.
 
-- Admin: who can actually create permission policies, assign policy/permission/access to standard users
-- Standard: who can basically login into the system and can only operate assigned functions only
 
-Modules:
 
-System has predefined modules: Vendor, Customer, Product. Basic CRUD operations should be available in the system
+## Purpose
 
-Domain Models
+Purpose of this project is to demonstrate how we can assign specific operation access to specific people dynamically without changing the source code. Policy based authorization allow user to assign only specific operation (Create/Read/Update/Delete) to a specific policy and assign this policy to user(s)
 
-```typescript
-interface Customer extends Log {
-  id: number;
-  name: string;
-  code: string;
-  phone: string;
-  address: string;
-}
+Morever a user can have multiple account to login; like credential login, Google login, Microsoft login and so on. This system allow to assign multiple account to (to login) one user, so that user can login into the system with any of them.
 
-interface Vendor extends Log {
-  id: number;
-  name: string;
-  code: string;
-  phone: string;
-  address: string;
-}
 
-interface Product extends Log {
-  id: number;
-  name: string;
-  code: string;
-  price: number;
-}
 
-interface Permission extends Log {
-  id: number;
-  policyId: numebr;
-  module: string;
-  access: number; // int8
-}
+## How It Works
 
-interface Policy extends Log {
-  id: number;
-  name: string;
-  permissions: Permission[];
-}
-```
-
-bitwise operation
+System will allow to user to setup master data by providing an admin credential. This admin credential has all CRUD operation access. To setup admin credential 
 
 ```go
-package main
-
-import "fmt"
-
-// Constants representing CRUD permissions as bits
-const (
-    CreatePermission = 8 // 2^3
-    ReadPermission   = 4 // 2^2
-    UpdatePermission = 2 // 2^1
-    DeletePermission = 1 // 2^0
-)
-
-// Function to check if a given permission exists in the CRUD bitmask
-func hasPermission(crud, permission int) bool {
-    return (crud & permission) != 0
-}
-
-func main() {
-    // Sample CRUD values
-    crud1 := 15 // 1111 (All permissions)
-    crud2 := 4  // 0100 (Read only)
-
-    // Checking for CRUD permissions
-    fmt.Printf("CRUD 1 - Create: %v, Read: %v, Update: %v, Delete: %v\n",
-        hasPermission(crud1, CreatePermission),
-        hasPermission(crud1, ReadPermission),
-        hasPermission(crud1, UpdatePermission),
-        hasPermission(crud1, DeletePermission))
-
-    fmt.Printf("CRUD 2 - Create: %v, Read: %v, Update: %v, Delete: %v\n",
-        hasPermission(crud2, CreatePermission),
-        hasPermission(crud2, ReadPermission),
-        hasPermission(crud2, UpdatePermission),
-        hasPermission(crud2, DeletePermission))
-}
-
+go run main.go -dbmigration -setup
 ```
 
-Then make a middleware to check every operation access.
 
-User Login:
 
-A user can connect social login with account. In signup time user can choose how to signup, then can integrate multiple social login. Then user can use any of them to authenticate.
+* `-dbmigration` create all necessary database models/tables
+* `-setup` to create master policy, master account credential 
 
-A User <-> Multiple Account
 
-```typescript
-interface User {
-  id: number;
-  name: string;
-  accounts: Account[];
-}
 
-interface Account {
-  id: number;
-  userId: number;
-  authProvider: string; // google, microsoft, credential
-  name: string; // email, phone or google email/id or something
-  secret: string; // optional --> could be password or OAuth session id or something
-}
-```
-
-User --> Policy map
-
-```typescript
-interface UserPolicy {
-  userId: number; // pk, sk
-  policyId: number; // pk, sk
-}
-```
-
----
-
-Roadmap
-
-- allow signin or not in user model
-- optional accounts array in user creation
+**Default Credential: admin | admin** 
