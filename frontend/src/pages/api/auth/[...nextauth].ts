@@ -1,7 +1,7 @@
 import NextAuth, { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials";
-import AzureAD from "next-auth/providers/azure-ad";
+import AzureADProvider from "next-auth/providers/azure-ad";
 import { GoogleAuth } from "@/auth/google";
 import { CredentialAuth } from "@/auth/credential";
 import { AuthService } from "@/service/auth";
@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider(GoogleAuth.config),
     CredentialsProvider(CredentialAuth.config),
-    AzureAD(MicrosoftAuth.config)
+    AzureADProvider(MicrosoftAuth.config)
   ],
 
   callbacks: {

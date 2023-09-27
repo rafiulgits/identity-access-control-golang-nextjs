@@ -53,6 +53,11 @@ func (s *UserService) CreateUser(data *dtos.UserCreateDto) (*dtos.UserDto, *dtos
 	automapper.Map(data, user)
 	user.ID = 0
 	user.Policies = policies
+	for _, a := range user.Accounts {
+		if a.AuthProvider == util.AuthProviderCredential {
+			a.SetPassword(a.Secret)
+		}
+	}
 	createdUser, err := s.userRepository.Create(user)
 	if err != nil {
 		infra.
@@ -161,6 +166,9 @@ func (s *UserService) CreateUserAccount(data *dtos.AccountUpsertDto) (*dtos.Acco
 	account := &domains.Account{}
 	automapper.Map(data, account)
 	account.ID = 0
+	if account.AuthProvider == util.AuthProviderCredential {
+		account.SetPassword(account.Secret)
+	}
 	createdAccount, err := s.accountRepository.Create(account)
 	if err != nil {
 		infra.
@@ -188,6 +196,12 @@ func (s *UserService) UpdateUserAccount(data *dtos.AccountUpsertDto) (*dtos.Acco
 			Str("loc", util.GetExecLocation()).Any("payload", data.ID).Err(err).Msg("database error while fetching user account")
 		return nil, dtos.NewDatabaseError(err)
 	}
+
+	if data.AuthProvider == util.AuthProviderCredential && account.AuthProvider != data.AuthProvider {
+		account.SetPassword(data.Secret)
+		data.Secret = account.Secret
+	}
+
 	automapper.Map(data, account)
 	updatedAccount, err := s.accountRepository.Update(account)
 	if err != nil {

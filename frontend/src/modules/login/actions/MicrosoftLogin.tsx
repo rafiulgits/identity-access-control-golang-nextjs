@@ -24,7 +24,7 @@ export const MicrosoftLoginAction = () => {
       type="primary"
       icon={<Icon component={MicrosoftSvg} />}
       onClick={() => {
-        signIn("microsoft");
+        signIn("azure-ad");
       }}
     >
       Login with Microsoft

@@ -3,7 +3,7 @@ import { AzureADClientID, AzureADClientSecret, AzureADTenantID, } from "@/util/e
 
 
 const microsoftSigninConfig = {
-  id: "microsoft",
+  id: "azure-ad",
   name: "microsoft",
   clientId: AzureADClientID,
   clientSecret: AzureADClientSecret,

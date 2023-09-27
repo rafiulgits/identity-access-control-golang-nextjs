@@ -24,6 +24,6 @@ export const AzureADClientSecret = process.env.AZURE_AD_CLIENT_SECRET
   : "";
 
 
-export const AzureADTenantID = process.env.AZURE_AD_CLIENT_SECRET
-  ? process.env.AZURE_AD_CLIENT_SECRET
+export const AzureADTenantID = process.env.AZURE_AD_TENANT_ID
+  ? process.env.AZURE_AD_TENANT_ID
   : "";

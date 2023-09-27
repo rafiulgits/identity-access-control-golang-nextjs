@@ -43,7 +43,7 @@ func (s *AuthService) CredentialLogin(data *dtos.CredentialLoginDto) (*dtos.Toke
 	}
 
 	//TODO: hashing the secret and compare the secret by hash value
-	if account.Secret != data.Secret {
+	if !account.CheckIfPasswordIsCorrect(data.Secret) {
 		return nil, dtos.NewDefaultErrorDto("incorrect password or secret")
 	}
 	accessToken, err := auth.GenerateToken(account.UserID)
